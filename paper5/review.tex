@@ -1,0 +1,87 @@
+\documentclass[10pt, twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[hmargin=.75in, vmargin=1in]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+
+\title{\vspace{-2.0em}Paper Review of CHOMP\\Gradient Optimization Techniques for Efficient Motion Planning}
+\author{Alvin Sun}
+
+\begin{document}
+\maketitle
+
+\section{Paper Summary}
+This paper proposed an optimization based method for efficiently planning
+collision free trajectories. This method explicitly defines the optimization
+objectives that considers both obstacles as well as dynamic requirements.
+The obstacle term is formulated as a potential function integrated through
+an SDF (signed distance field) representation, while the dynamical requirement
+is modeled with a quadratic function over the trajectory. The proposed
+regularized optimization method, like Gauss-Newton, converges much faster than
+naive Euclidean gradient, but does not require differentiability. They have also
+shown many successful implementations of their optimization planner
+on a variety of hardware platforms.
+
+\section{What I Learned}
+\begin{enumerate}
+  \item Signed distance field can be computed super efficiently with
+    Euclidean Distance Transform, which takes linear time.
+  \item Finite differencing of the trajectory can be constructed with
+    appropriate linear operators.
+\end{enumerate}
+
+\section{Opinions}
+
+\subsection{Up Votes}
+\begin{itemize}
+  \item I like how obstacles are formulated into the optimization objective.
+    The SDF is both efficient to compute as well as easy to be incorporated
+    with objective functions. This eliminates the need for a sampling based
+    planner that explicitly checks for collision.
+  \item I also like their approach on using local linear approximation with
+    regularized optimization objective. This not only results in a efficiently
+    computable update rule, but also ensures smoothness across the trajectory
+    update.
+\end{itemize}
+
+\subsection{Down Votes}
+I don't really disagree much with this work. One slight shortcoming of CHOMP
+is that it might be hard to explicitly plan for tasks that requires close
+proximity or even contacts. The optimization results naturally repel the trajectory
+away from any occupied space. It might be hard to plan trajectories that
+aim to move towards some target object (obstacle).
+
+\section{Evaluations}
+The goal of this paper is to introduce a unified optimal control framework
+that is not only able to generate smooth trajectories, but also takes
+environment, more specifically obstacles, into account. It is a perfectly valid goal
+as previous work on motion planning considering obstacle avoidance mostly
+uses sampling based method, which can produce jerky and dynamically unfeasible
+trajectories. On the other hand, previous work on optimal control has not been
+successfully take obstacle avoidance into account with efficient computing.
+The significance of bridging the gap between optimal control and obstacle avoidance
+also lies in making the whole robotic control system easier to implement
+with such unified framework.
+
+This paper is of very high quality in my opinion. The proposed methodology
+provides sound derivation of optimization theories that are both tractable
+and efficient to implement in practice. Their experimental results also
+suggests a huge success in a variety of sophisticated real world robotic
+system including the \textit{LittleDog} from Boston Dynamic Inc. One slight
+unaddressed assumption they made is that CHOMP requires the knowledge of
+3D environment around the manipulator. Accurate 3D reconstruction is in fact
+still a open and challenging problem to be solved.
+
+\section{Questions}
+\begin{enumerate}
+  \item Where does the metric $M$ in Equation (3) comes from?
+  \item Is the computation still tractable if the manipulators are instead
+    modeled with polygonal meshes?
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,91 @@
+\documentclass[10pt, twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[hmargin=.75in, vmargin=1in, tmargin=.3in]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+
+\title{Paper Review: Postural Hand Synergies for Tool Use}
+\author{Alvin Sun}
+
+\begin{document}
+\maketitle
+
+\section{Paper Summary}
+This paper presents a study on postural hand synergies with data collected
+from human subject trials. The experiment asks each of the 5 subjects to imagine
+picking up some commonly seen objects when the posture of the hand grasp 
+is recorded in the form of joint angles. A PCA analysis is then carried out 
+across the joint angles on the hands, and 
+it is found that most of the variances are contained in the first two principle
+components. It is also found that different grasps vary on a
+continuum of spectrum instead of clustered into discrete groups.
+
+\section{What I Learned}
+
+I learned that given that many degree of freedom a human hand
+has, the actual effective dimension is much lower due to correlation between different
+joint angles. It is also surprising that the study found no evidence of 
+clustering occurs on the grasp of different objects. Intuitively, we make
+discrete grasp configuration for different object, but the study somehow shows
+that the posture varies on a continuous spectrum.
+
+\section{Opinions}
+
+\subsection{Up Votes}
+\begin{itemize}
+    \item I like how this paper visualizes raw data in multiple ways. 
+        The correlation plot immediately
+        reveals relations between different joints. It also verifies the 
+        fact that we don't have individual control over some of the finger joints.
+    \item I also love the ray-cast rendering of the hand posture in the PCA 
+        analysis. It gives direct visual intuition on what are the dominant modes 
+        of hand postures.
+\end{itemize}
+
+\subsection{Down Votes}
+Given most if not all of the joint angles are biologically constrained,
+it does not seem like the correlation among them is linear. PCA can 
+only account for linear coordinate transformations, and therefore, has 
+a limited capability of explaining the underlying dynamics between 
+the fingers.
+
+\section{Evaluations}
+
+The goal of this paper is to study the postural hand synergies to 
+\begin{enumerate}
+    \item provide insights into how human plans for hand grasp configurations;
+    \item explore correlations between the different degree of freedom of a human hand;
+    \item find out whether hand postures can be clustered or classified for different
+        object being grasped.
+\end{enumerate}
+The overall analysis on the postural hand synergies is quite significant as 
+it not only provides direct insights for planning robotic grasp configurations,
+but also hints that the control of grasp posture may be regulated independently 
+of contact forces.
+
+The overall quality of this paper is solid. The data is collected rigorously
+with specialized sensor equipment while the diversity of the data is ensured 
+through having multiple subject, multiple trials, and multiple object grasps.
+The PCA analysis is definitely one of the simplest and most powerful techniques 
+for studying feature correlations. The paper has also shown that the effective 
+information of the human grasp can be compressed down to just 2 or 6 dimensions 
+depending on the fineness of control. However, one slight 
+shortcoming of this approach is the linear assumption that comes with PCA, 
+which is almost certainly not true for the model of human finger control.
+
+\section{Questions}
+\begin{enumerate}
+    \item It seems like the orientation of the hand can be synergized with 
+        the overall posture of the hand, why not consider at least the wrist 
+        angle of the posture? It seems like the rendered hand postures all 
+        have the same top-grasp orientation.
+    \item How is the discrimination function computed and how is the confusion 
+        matrix (of posture-to-object) generated?
+\end{enumerate}
+
+\end{document}

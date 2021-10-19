@@ -1,0 +1,106 @@
+\documentclass[10pt, twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[hmargin=.75in, vmargin=1in, tmargin=.3in]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+
+\title{Paper Review: Planning Optimal Grasps}
+\author{Alvin Sun}
+
+\begin{document}
+\maketitle
+
+\section{Paper Summary}
+This paper presents a formulation for quantifying the quality of different 
+grasp configurations on objects with known (parameterized) shapes. The quality 
+value represents a lower bound on the maximum wrench that can be resisted 
+per unit force exerted by the gripper. The quality value can also be 
+geometrically interpreted as the radius of the sphere that is inscribed inside
+the set of reachable wrenches. This paper also provides
+computationally feasible algorithms for computing such quality values as well
+as example algorithms for planning optimal grasps on polygonal objects.
+
+\section{What I Learned}
+
+\begin{description}
+    \item[Force Closure.] The state where all forces and moments introduced 
+        by the different contact locations are canceled out. It can also be 
+        verified by checking if the origin is contained in the set of
+        reachable wrenches or not.
+
+    \item[Friction Cone.] Static friction forces, or wrenches to be more 
+        general, can be modeled using a geometric cone inside the wrench space, 
+        where all wrenches inside the cone results in non-slipping situations.
+
+    \item[Convex Hull.] This operator can be used
+        to represent sets of elements that can be obtained by convex combinations
+        of the vertex elements.
+\end{description}
+
+\section{Opinions}
+
+\subsection{Up Votes}
+\begin{itemize}
+    \item This paper provides beautiful geometric interpretation of its
+        derived theories, i.e. the closest distance from the boundary
+        of the set of reachable wrenches to the origin is equivalently 
+        the proposed quality value.
+    \item I like the design of using a flexible norm definition of the
+        generalized force vector. This allows us to optimize for different 
+        objectives (maximum force vs. total force).
+\end{itemize}
+
+\subsection{Down Votes}
+\begin{itemize}
+    \item I don't think computing the Minkowski sum is efficient, especially
+        when we are using large number of primitive wrench vectors to 
+        approximate the friction cone boundary. The number of vertices on
+        the convex hull can potentially reach $m^n$.
+    \item For non-convex objects such as anything that has a handle, it
+        becomes sub-optimal if we plan the grasps based only on the convex
+        hull of the object.
+    \item The definition of $\|w\| = \sqrt{\|F\|^2 + \lambda \|\tau\|^2}$
+        is not very well thought out. Even though the paper adds the $\lambda$
+        to account for the scale difference between forces and torques, 
+        it is still somewhat unsure how $\lambda$ will affect the overall 
+        optimal criteria.
+\end{itemize}
+
+\section{Evaluations}
+
+The goal of this paper is to provide a unified formulation of optimal criteria
+for grasp related tasks. The paper delivers such formulation nicely with
+flexible choices of optimization objectives as well as algorithms that 
+quantitatively and feasibly computes for the optimal criteria. The most significant
+contribution, in my opinion, is the unified formalization such that both 
+independent and combined forces of the grippers can be optimized.
+
+The overall quality of this paper is great, due to its sound derivation of 
+the proposed quality value formulation as well as the algorithms with finite
+computation. However, this paper does lack a  quantitative evaluation of 
+how good the planned grasps are compared to 
+previous work. The assumption it makes is also somewhat unrealistic given
+real world uncertainties in all kinds of modeling. The proposed methods require
+prior knowledge of the exact friction model as well as geometric model of the 
+object to be grasped, which is sometimes too complicated to obtain in
+real-world situations.
+
+\section{Questions}
+\begin{enumerate}
+    \item I am a little confused by the definition 
+        $B\bm{g} = \{\bm{w}\; |\; \bm{w}A\bm{g} \text{ is true, and } \|\bm{g}\| = 1\}$.
+        How does $\bm{g}$ ends up being a constraint on the set (of $\bm{w}$)?
+
+    \item What happens if part of the surfaces of an object is 
+        parameterized by some continues curvature (e.g. sphere, ellipsoid, etc.)?
+
+    \item How do you estimate forces exerted by the gripper when the gripper 
+        is some complicated shapes with multiple joints?
+\end{enumerate}
+
+\end{document}

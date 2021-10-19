@@ -1,0 +1,237 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{times}
+
+% numbers option provides compact numerical references in the text.
+\usepackage[numbers]{natbib}
+\usepackage{multicol}
+\usepackage[bookmarks=true]{hyperref}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{dsfont}
+
+\pdfinfo{
+   /Author (Alvin Sun)
+   /Title  (Robots: Our new overlords)
+   /CreationDate (D:20101201120000)
+   /Subject (Robots)
+   /Keywords (Robots;Overlords)
+}
+
+
+\begin{document}
+
+% paper title
+\title{We Can See Objects As Well As Our Hands}
+
+% You will get a Paper-ID when submitting a pdf file to the conference system
+%\author{Author Names Omitted for Anonymous Review.}
+
+\author{\authorblockN{Alvin Sun}
+\authorblockA{Department of Mechanical Engineering\\
+Stanford University\\
+Stanford, California 94305\\
+Email: alvinsun@stanford.edu}}
+
+
+% avoiding spaces at the end of the author lines is not a problem with
+% conference papers because we don't use \thanks or \IEEEmembership
+
+
+% for over three affiliations, or if they all won't fit within the width
+% of the page, use this alternative format:
+%
+%\author{\authorblockN{Michael Shell\authorrefmark{1},
+%Homer Simpson\authorrefmark{2},
+%James Kirk\authorrefmark{3},
+%Montgomery Scott\authorrefmark{3} and
+%Eldon Tyrell\authorrefmark{4}}
+%\authorblockA{\authorrefmark{1}School of Electrical and Computer Engineering\\
+%Georgia Institute of Technology,
+%Atlanta, Georgia 30332--0250\\ Email: mshell@ece.gatech.edu}
+%\authorblockA{\authorrefmark{2}Twentieth Century Fox, Springfield, USA\\
+%Email: homer@thesimpsons.com}
+%\authorblockA{\authorrefmark{3}Starfleet Academy, San Francisco, California 96678-2391\\
+%Telephone: (800) 555--1212, Fax: (888) 555--1212}
+%\authorblockA{\authorrefmark{4}Tyrell Inc., 123 Replicant Street, Los Angeles, California 90210--4321}}
+
+
+\maketitle
+
+%\begin{abstract}
+%The abstract goes here.
+%\end{abstract}
+
+\IEEEpeerreviewmaketitle
+
+\section{Introduction}
+Precise manipulation of objects, especially in
+unknown environment, has long been a challenging problem that is preventing
+autonomous robot manipulators from reaching the intelligence of a human.
+There are several difficulties:
+\begin{enumerate}
+  \item Computing for the dynamics of the manipulator alone could sometimes be
+    quite difficult considering the number of DOF it could have. This is especially
+    true if the manipulator is deployed to mobile platforms where the true
+    state of the platform itself is hard to estimate.
+  \item The surrounding environment, even though for the non interacting part,
+    is hard to model, given it can potentially includes infinite number of
+    possible configurations.
+  \item Most importantly, precise manipulation of objects require some knowledge
+    of the object itself -- either its physical dynamics or its states.
+    However, the object(s) of interests, or the ones to be manipulated,
+    has physical properties that are most of the time unknown to the manipulator.
+    Many commonly seen objects could even be deformable, of which the dynamics
+    are even harder to learn.
+\end{enumerate}
+
+Human naturally deal with such challenges with feedback. The control policy gets
+adjusted on the fly when a human approach some objects and potentially make
+mistakes such as misalignment or grasp inaccuracy. Vison, tacile, and proprioception
+are the main sensory feedbacks that aid humans to achieve such adjustment. However,
+if we look at how we think about the manipulation tasks, we don't really keep
+separate internal dynamics of ourselves and the objects. Instead, we
+think of the manipulation dynamics as a whole where some action changes
+the states of both ourselves and the objects. As pointed out by \citet{imitation},
+the learning process of human infant rely heavily on imitation based on visual
+perception.
+
+Taking the inspiration from such biological intuition, we propose a supervised
+learning method for obtaining joint visual representation of the dynamics of both
+the manipulator and the environment it is interacting with. In control
+literature, real-world dynamical system is usually modeled with
+\begin{gather}\label{eqa:dynamic_cont}
+  x(t) = f(\dot{x}(t), u(t)),
+\end{gather}
+while sometimes discretized to the form
+\begin{gather}\label{eqa:dynamic_disc}
+  x_{k+1} = f(x_k, u_k).
+\end{gather}
+Our method is effectively a forward predictive model in the form of
+Equation~\ref{eqa:dynamic_cont} where the encoded states $x$ encapsulate both the
+manipulator as well as the object it is trying to manipulate. This learned
+dynamics can be integrated for more efficient downstream tasks such as
+control optimization that takes the manipulated object into account.
+
+\section{Related Work}
+
+\subsection{Model Learning}
+The learning of unknown dynamics, also known as the system identification
+problem, has been tackled from a wide range of angles. Dynamic Mode Decomposition
+\cite{dmd} and its nonlinear variant eDMD \cite{edmd} are two of the most
+widely applied system identification approaches that exploited the eigen
+structures of (locally) linear dynamical systems. Later, \citet{dmdc} applied
+control algorithms to models learned from DMD.
+More recently, \citet{sindy} proposed to SINDy, which utilizes compressed
+sensing techniques
+to learn the true underlying physics of arbitrary dynamical systems by getting
+a sparse sets of coefficients for a large non-linearity dictionary. \citet{sindyc}
+later applied model predictive control on systems identified using SINDy.
+\citet{deepsindy} built on top of SINDy and uses deep neural networks to
+generalize for high dimensional inputs such as images. However,
+for all of the methods mentioned, the learned models are mostly for
+standalone dynamics that does not account for complicated interactions
+such as contact.
+In the RL literature, \citet{pilco} proposed to model arbitrary unknown
+(discrete) dynamical model following Equation~\ref{eqa:dynamic_disc}
+as Gaussian processes. Though it resulted in data efficient learning of a wide range
+of systems, it again does not consider any dynamical interaction with the
+environment. \citet{deeppilco} later generalizes this method to work with
+high dimensional image spaces, but still does not concern interaction.
+
+\subsection{Visual Representation}
+\citet{deep_visuomotor} started the area on visuomotor learning with an end-to-end
+learning algorithm for manipulation task. However, the learning process rely on local
+controller that has full observability over the states of the object. Several
+methods \cite{latent_dynamics, dream_to_control} explicitly learn latent dynamics
+of the environment, but without interpretability over the learned latent space.
+Other work \cite{vision_touch,dense_objnet} has come up with explicit visual
+representation of the environment, but the connection of those learned representations
+to control policies are unclear. \citet{dense_physics} explicitly learns the
+physics of real-world items through programmed interactions, but is fairly
+limited to just estimating inertia properties of the objects instead of
+complicated manipulation dynamics.
+
+\section{Proposed Research}
+\subsection{Problem Formulation}
+We propose a self-supervised vision-based learning method for estimating joint
+dynamical representation of the robotic manipulator as well as the object to be manipulated.
+Considering causal effect between the control inputs and states, some control input
+could cause some states (sometimes for both manipulator and objects) to change.
+The change is reflected in direction of motion, which is the time derivative
+term in Equation~\ref{eqa:dynamic_cont}. However, during the reaching phase of
+a manipulation, when the manipulator is not in contact with the object, it is
+unlikely that the action of the manipulator could cause a state change of an
+object unless there are external interaction among the environments. If
+we use $x_m$ and $x_e$ as the states of the manipulator and environment
+respectively, and $u$ as the action for the manipulator, we can first
+create a contact detector model $c$ such that
+\begin{gather}
+  c(x_m, x_e) = \mathds{1}\{\text{$x_m$ and $x_e$ is in contact}\}.
+\end{gather}
+Then we can formulate an explicit switching dynamics for both the manipulator
+and the environments,
+\begin{align}
+  \label{eqa:manip_dyn}
+  \dot{x}_m &= \begin{cases}
+    f_m^{\bar{c}}(x_m, u) & \text{if $c(x_m, x_e) = 0$} \\
+    f_m^c(x_m, x_e, u) & \text{otherwise}
+  \end{cases}\\
+  \label{eqa:env_dyn}
+  \dot{x}_e &= \begin{cases}
+    f_e^{\bar{c}}(x_e) & \text{if $c(x_m, x_e) = 0$} \\
+    f_e^c(x_m, x_e, u) & \text{otherwise}
+  \end{cases}
+\end{align}
+Now, given all those contact / non-contact dynamics are unknown, and the
+inputs are high dimensional and also potentially multimodal, we would
+like a compressed latent representation of the dynamics.
+
+\subsection{Modeling with Deep Neural Networks}
+Following \citet{vision_touch}, we can extract some multimodal representation
+of the sensor readings through neural network. To extent upon their representation,
+the multimodal fusion module could be implemented with RNNs such as GRU or LSTM
+to account for temporal effects of dynamics. Let $\mathcal{I}$ denotes the
+collection of input sensors, we can learn the latent dynamics with neural
+networks parametrized by $\{\theta, \phi\}$ as follows,
+\begin{align}
+  x_m &= f_\theta(\mathcal{I}) \\
+  x_e &= f_\phi(\mathcal{I})
+\end{align}
+Similarly, the four dynamical models from Equations~\ref{eqa:manip_dyn} and
+\ref{eqa:env_dyn} can also be learned as GRU or LSTM units
+due to their ease of back propagation. The supervision training signal
+will be provided by trying to reconstruct the image space derivatives
+through the latent space derivatives. More specifically, $\dot{x}_m$ and
+$\dot{x}_e$ should contain information for reconstructing the optical flow
+that reflects movement of the manipulator and the objects respectively.
+The contact model, $c(x_m, x_e)$, can also be learned as a binary classifier
+considering we have some touch and torque feedback from the manipulator.
+Since this representation learns a continuous dynamical model in a latent
+space, we can also use it to roll out longer horizon trajectories with
+discretization. Simple forward Euler integration could be implemented for
+simplicity as well as for being back propagation friendly. With the rolled
+out trajectory, we can make training harder by using longer time horizon.
+The model can then be trained with progressively longer prediction horizon
+and equivalently higher difficulties.
+
+\subsection{Automatic Data Generation}
+RGBD camera sensor can be used to generate ground truth optical flows.
+Since we have a manipulator which relatively robust pose estimates, we can
+use \cite{3d_detection} to segment out the moving parts (i.e. the manipulator
+and / or the objects) and calculate flows with camera back projections.
+For obtaining an interpretable learned latent dynamics, we can provide
+some supervision on it using knowledge from proprioception.
+
+TODO: more details here.
+
+\section*{Acknowledgments}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
+
+

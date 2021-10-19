@@ -1,0 +1,84 @@
+\documentclass[10pt, twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[hmargin=.75in, vmargin=1in, tmargin=.3in]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+
+\title{Paper Review\\Extrinsic Dexterity: In-Hand Manipulation with External Forces}
+\author{Alvin Sun}
+
+\begin{document}
+\maketitle
+
+\section{Paper Summary}
+This paper exploits a particular type of robotic in-hand manipulation that utilizes
+resources outside of the capability of the grasp actuators themselves. This
+type of manipulation is then named ``extrinsic dexterity manipulation.'' This
+paper specifically categorizes extrinsic dexterity manipulation into three
+different types. This work then performed experiments, based on some proposed
+grasp graph, on a few primitive shapes
+for the different types of extrinsic dexterity. Some qualitative and quantitative
+results are reported for the successfulness of hand-tuned open loop control
+on those different objects and different situations.
+
+\section{What I Learned}
+When we are manipulating objects with robotic grippers, it is crucial to be
+aware of the dynamics of both the objects and its surrounding environments.
+Simple design of the fingers, like the one used in this paper, can introduce
+limited level of manipulation themselves. However, if we takes factors such as
+gravity and external obstacles into account, we may be able to do much more than
+using just the fingers.
+
+\section{Opinions}
+
+\subsection{Up Votes}
+I agree with the idea that extrinsic resources can affect the manipulated object
+in much more diverse way then the fingers themselves can. Even thinking about how
+human manipulate objects with hands, we take advantage of factors such as weight
+distributions and fixed platforms all the time.
+
+\subsection{Down Votes}
+\begin{itemize}
+  \item All experiments conducted in this paper is hand-coded with open loop
+    control. Even though they analyze the sensitivity in initial condition
+    error, it is still quite far away from being deployed to real-world situations
+    where uncertainties are a major factor in pick-and-place tasks.
+  \item This paper only reveals the fact that the tuned control is from trial
+    and error but does not discuss the process of their tuning. The reported
+    success on the different scenarios might come with the cost of excessive
+    number of failing trials.
+\end{itemize}
+
+\section{Evaluations}
+
+The goal of this paper is to exploit the effect of extrinsic dexterity for
+in-hand manipulation. This is a perfectly valid goal and it is also quite significant
+since most studies on grasp manipulations by that time is focusing on the control
+of the gripping actuators themselves. Extrinsic dexterity brings in much more
+possibilities for what a simple gripper can achieve.
+
+However, I think the overall quality of this work is not so great. There are
+rarely any theoretical analysis on their proposed types of grasp. Most importantly,
+all the experiments are done with hand-coded open loop controller, meaning that
+there is almost certainly no tolerance to any disturbances or changes to the systems.
+Although they did some quantitative analysis on how much of an initial condition
+variation can be tolerated for certain type of grasp, the tolerance is quite low
+(sub centimeter level). Any new object, new gripper configuration, will require
+excessive re-tuning for it to work not so reliably. That said, given this was an
+early-stage work on the area of extrinsic dexterity, I do want to give them the
+credit for bringing the importance of this concept up to the public.
+
+\section{Questions}
+\begin{enumerate}
+  \item how is Fig. 12 obtained? Are the samples interpolated and then visualized
+    with contours?
+  \item I am wondering how many trials failed before coming up with an controller
+    that can succeed in consecutive 50 tries.
+\end{enumerate}
+
+\end{document}

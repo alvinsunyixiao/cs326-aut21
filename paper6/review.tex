@@ -1,0 +1,89 @@
+\documentclass[10pt, twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[hmargin=.75in, vmargin=1in]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+
+\title{\vspace{-3.0em}Paper Review\\Deep Reinforcement Learning: A Brief Survey}
+\author{Alvin Sun}
+
+\begin{document}
+\maketitle
+
+\section{Paper Summary}
+This survey paper starts from introducing some foundational reinforcement
+learning techniques comparing model-based v.s. model-free methods as well as
+value based v.s. policy search based methods. It also discussed some hybrid
+setups such as actor-critic where both value functions and actor policy are
+involved. Building on top of those foundational background, the survey
+summarizes some of early work that focuses on deploying deep
+neural network to those traditional RL methods. The most famous ones include
+DQN which approximate quality function in Q-learning with DNN,
+deep policy gradient, and deep DPG which builds off of the actor-critic method.
+Finally, this survey highlights some of the current ongoing research directions
+including but not limited to model learning with deep NN, hierarchical RL,
+and inverse RL.
+
+\section{What I Learned}
+\begin{enumerate}
+  \item The idea of inverse reinforcement learning is quite interesting that
+    it seems like this could be the future for imitation learning. Instead of
+    training some policy to mimic behaviors, inverse RL actually learns the
+    objective function that is capable of long horizon prediction.
+  \item Model-based RL has not yet utilized deep learning technologies very well
+    due to the low data efficiency in deep learning algorithms.
+\end{enumerate}
+
+\section{Opinions}
+
+\subsection{Up Votes}
+\begin{itemize}
+  \item This survey really nicely sets up the background of RL as well as Markov Decision
+    Processes before jumping into the more recent methods involving deep learning
+    techniques.
+  \item This survey also covers some details on recent progressions on DQN based
+    methods, such as experience replay and target network. It is quite informative
+    for people with few RL experiences.
+\end{itemize}
+
+\subsection{Down Votes}
+Since this is a survey paper, I don't really have too much negative opinion
+about the paper. One slight concern of mine is that the mathematical equations
+in this survey could sometimes be out of the blue. For example, equation 7
+is put their without explanation. However, given this is a survey paper, the
+equation becomes clear when I looked at the cited paper that this survey
+is directing towards.
+
+\section{Evaluations}
+The goal of this paper is to put together a brief survey on the recent
+development on deep reinforcement learning. I belief that this is a perfectly
+valid goal because of the general development in RL has branched off in multiple
+directions (e.g. value / policy based, model based / model free, etc.), and so
+such a survey could really help the readers obtain a bigger picture on the
+overall development in the reinforcement learning literature. This is novel
+in a way that few people have put together such comprehensive overview on RL
+up to that time.
+
+The quality of this survey is overall pretty good. Since it is not a research
+paper, there is not really any assumptions made by the survey. The quality is
+mostly evaluated on how comprehensive this survey covers about the topics in
+deep reinforcement learning. The provided foundational review on reinforcement
+learning is pretty solid as it covers most of the well deployed methods ranging
+from a variety of different approaches. The later discussions on deep reinforcement
+learning, however, tend to gloss over quite some detail implementations over
+those covered methods. This is understandable from a page limit perspective, as
+it cannot include all the details for all the paper that this survey is reviewing for.
+
+\section{Questions}
+\begin{enumerate}
+  \item How does Q learning relates with Temporal Difference Learning?
+  \item How does gradient free policy search explores the parameter space? Or
+    what heuristics are most often used?
+\end{enumerate}
+
+\end{document}

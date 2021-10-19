@@ -1,0 +1,93 @@
+\documentclass[10pt, twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[hmargin=.75in, vmargin=.75in]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+
+\title{\vspace{-3.0em}Paper Review\\Is Imitation Learning the Route to Humanoid Robots?}
+\author{Alvin Sun}
+
+\begin{document}
+\maketitle
+
+\section{Paper Summary}
+This paper reviews developments in up-to-date neural sciences that have specifically
+been focusing on imitation learning. It also draws connection to how artificial
+intelligence has been benefiting from such neurological intuitions. This paper
+provides a glossary over the common concepts related to imitation learning,
+and went through each one with their relationship to imitation algorithms.
+Evidence of "mirror neurons" found in monkeys confirmed some implicit relationship
+between observing and imitating, which further confirms the existence of imitation
+mechanisms in biological systems. This review also goes through different approaches
+to imitation learning as well as each of the relationship to human learning.
+Finally, it summarizes with on going challenges yet to be solved including
+but not limited to a good representation for action-perception coupling.
+
+\section{What I Learned}
+\begin{enumerate}
+  \item There are this "mirror system" in our neural system where neurons respond
+    both to observation and execution events.
+  \item Even for nowadays algorithms, using movement primitives might provide better
+    and more interpretable high level motion planning of humanoid robots.
+  \item
+    Perception and motor control are coupled not only during motor control, but
+    also during learning.
+\end{enumerate}
+
+\section{Opinions}
+
+\subsection{Up Votes}
+\begin{itemize}
+  \item I strongly agree that for any humanoid control, the control and perception
+    are deeply coupled. Even though this review is published in last century,
+    it is still true that there haven't been a generically good learning representation
+    for this action-perception coupling.
+  \item I also agree on the general approach for drawing intuition from neural
+    science researches when developing imitation learning methods. If we are to
+    imitate biological systems with robots, we'd better know how biological
+    systems learn themselves.
+\end{itemize}
+
+\subsection{Down Votes}
+Since this is again a survey / review paper, and also given it is published about
+20 years ago, I don't really have too much negative opinion
+about the paper. One thing I slightly disagree about the paper is the focus on
+humanoid robots. I don't think all those neurological concepts brought up
+in the paper is limited to aiding the design of just humanoid robots. I believe
+that any robots that aims for learning from perception can benefit from such
+neurological intuitions.
+
+\section{Evaluations}
+The goal of this review paper is to summarize some of the up-to-date development
+in neural sciences and how imitation learning algorithms for robotic applications
+can benefit from connecting with those neurological concepts. This is a perfectly
+valid and novel objective as there wasn't a clear connection between
+the ongoing research in imitation learning algorithms and neural psychology
+sciences. Introducing imitation learning from both viewpoint of robotics and
+cognitive science can certainly open up new directions in the research of
+robotic learning. To name a few, the learning movement primitives explicitly
+is still an open area in robotic planning today; learning for joint action-perception
+representation is also under active research currently.
+
+The overall quality of this paper is good. Since this is also a review paper,
+it does not have much of a point to prove. The evaluation is done mostly on
+the comprehensiveness of the review. It has done pretty well introducing the
+terminologies with neural / cognitive science and drawing connection to
+the ongoing research of imitation learning at that time. One slight
+short coming of this work is that this review seems to be
+conducted under the assumption of building humanoid robots, but in general, I don't
+think robot has to be humanoid or even bio-like, I think those cognitive
+research findings are applicable to most robotic applications nowadays as well.
+
+\section{Questions}
+\begin{enumerate}
+  \item Could you given an example for \textbf{accommodation}?
+  \item What exactly is \textit{model-based imitation learning}?
+\end{enumerate}
+
+\end{document}
