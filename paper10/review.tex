@@ -1,0 +1,102 @@
+\documentclass[10pt, twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[hmargin=.75in, vmargin=1in]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+
+\title{\vspace{-3.0em}Paper Review\\Visual Servo Control Part 1: Basic Approaches}
+\author{Alvin Sun}
+
+\begin{document}
+\maketitle
+
+\section{Paper Summary}
+This tutorial paper introduces two classical visual servo control methods
+in great detail: image-based visual servo (IBVS) and position-based visual servo (PBVS).
+It first introduces the problem of visual servoing as a minimization of error
+based on some image features and camera parameters. Based on such overall
+problem formulation, this paper then derives from scratch the velocity controller
+that ideally makes the tracking error decay exponentially. To achieve such
+controller, the pseudoinverse of the interaction matrix (which relates camera velocity
+and rate of error changes) is required. Different approaches for estimating
+this pseudoinverse are compared in terms of tracking behavior both in image
+space and in camera motion. In addition to tracking feature points in image space
+(IBVS), this paper also shows the derivation for a visual servo controller
+that directly track camera position(PBVS). Stability analysis is carried out
+for both IBVS and PBVS, and results are two-sided. Even though local convergence
+is usually guaranteed, IBVS does not guarantee any global asymptotic convergence
+due to having multiple local minima. On the other hand, while PBVS shows favorable
+convergence property in theory, it is very sensitive to estimation error,
+which will affect the stability in practice.
+
+\section{What I Learned}
+\begin{enumerate}
+  \item There is a trade off between the performances of camera motion
+    tracking and image space feature tracking. A straight line trajectory
+    is usually desirable in both domain, but not achievable at the same time.
+
+  \item Using a combination of $L_e^+$ and $L_{e^*}^+$ in IBVS can achieve
+    more balanced and smooth tracking on both camera domain and image domain.
+\end{enumerate}
+
+\section{Opinions}
+
+\subsection{Up Votes}
+\begin{itemize}
+  \item I like how this tutorial structures the content in a very
+    organized way, starting from problem formulation to goals to achieve.
+    It first gives a comprehensive review on camera projection and 3D geometries,
+    and derives the visual servo control law from scratch. It makes the math
+    fairly straight for readers to follow.
+
+  \item I also really like the graphics in this paper. It really aids understanding
+    the different type of controllers and performances. The figure that
+    shows a geometrical interpretation of IBVS also makes understanding
+    the benefit of using a hybrid controller clearer.
+\end{itemize}
+
+\subsection{Down Votes}
+Among all the nice derivations this tutorial presents, there is one
+short coming in my opinion, which is the limited number of examples.
+Most if not all examples used in this paper are tracking of four coplanar
+points. This does not come nearly as close to any objects in reality. I think
+some examples should at least consider using polygonal 3D shaped objects.
+
+\section{Evaluations}
+The goal of this paper is to provide a tutorial on the emerging visual servoing
+problem as well as comparing different classical methods that attempt to solve
+the problem. This is a valid objective as it provides a quick background
+introduction of visual servoing
+without requiring extensive computer vision and control background for the readers.
+It neatly derives the basic approaches to achieve visual servoing while at the
+same time sets off a solid background for more advanced methods presented in
+part 2 of this tutorial series.
+
+I believe the quality of this paper is exceptional. It comprehensively covers
+multiple approaches that make different level of assumptions. For example, if
+depth information is available, we can use IBVS with the exact pseudoinverse
+of the interaction matrix. If not, this paper also shows that there is another
+way of estimating the pseudoinverse by fixing it with the optimal-state
+interaction matrix, which is really to implement in practice. The graphics
+shown in this paper is also exceptional for understanding the performances
+of different controllers in both camera motion tracking and image space
+tracking. Finally, it also carried out theoretical stability analysis
+for both IBVS and PBVS, which leads to a conclusion and discussion
+on the challenging open problems in visual servoing.
+
+\section{Questions}
+\begin{enumerate}
+  \item I am quite curious why does estimating $L_e^+$ with $L_{e^*}^+$ still
+    work when the error is large (e.g. Figure 2)?
+
+  \item In the stability analysis, why is Equation 19 satisfied when the
+    approximations involved in $\widehat{L_e^+}$ are not too coarse? What does
+    it even mean to have approximations not too coarse?
+\end{enumerate}
+
+\end{document}

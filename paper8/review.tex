@@ -1,0 +1,99 @@
+\documentclass[10pt, twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[hmargin=.75in, vmargin=.75in]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+
+\title{\vspace{-2.0em}Paper Review\\Online Movement Adaptation Based on Previous Sensor Experiences}
+\author{Alvin Sun}
+
+\begin{document}
+\maketitle
+
+\section{Paper Summary}
+This paper presents an online adaptation algorithm that can effectively generate robust
+robotic arm control by leveraging sensor readings from previous
+successful trial runs. Their method first learns some human demonstrated trajectories
+as a DMP (Dynamic Movement Primitives) system. It then uses this learned DMP model
+to generate predictive sensor responses in subsequent runs. Using this predictive
+model and the actual sensor feedback, they can modify the trajectory by adding
+the feedback to the transformation system in the DMP. Fianlly, using this
+adapted trajectory plan, a low-level position and force controller is applied
+for the robotic arm and fingers to track the generated trajectories. In parallel,
+the authors also proposed a mathematically correct DMP formulation that deals
+with quaternion trajectories. Their experiments demonstrated that the grasping
+can handle much more perturbed initial condition using their proposed adaptation
+algorithm.
+
+\section{What I Learned}
+\begin{enumerate}
+  \item A goal directed trajectory can be efficiently learned with a DMP model that has
+    nice guarantees of convergence and stability properties.
+  \item Sensory feedback, in additional to the dynamical system itself, can contain
+    some predictive information about the executed control.
+\end{enumerate}
+
+\section{Opinions}
+
+\subsection{Up Votes}
+\begin{itemize}
+  \item I strongly agree with their proposed re-formulation of DMP for
+    quaternion trajectories. The formulation effectively ensures that the
+    derivatives lives in the tangent space of current quaternion state.
+    I think this can also be generalized to other constrained manifolds
+    such as $SE3$, so that the DMP can jointly consider translation and
+    rotation.
+
+  \item I also like how they formulate the robotic arm controller in a way
+    that the position control and force control is decoupled, and can be
+    simply additive in the overall controller.
+\end{itemize}
+
+\subsection{Down Votes}
+I don't this work conducted enough experiments to show the effectiveness of
+their proposed adaption method. They only showed the successful grasp on
+a simple cylinder shaped cup, and a laid-down bottle. The latter experiment
+also neglects the contact dynamic between the gripper and the table
+due to fear of collision. The demonstrated examples are quite limited
+when comparing to real-world demands for robotic grasping tasks.
+
+\section{Evaluations}
+The goal of this paper is to exploit the predictive information present
+in sensor experiences for robotic grasping problems and to find out how those information
+can be converted to useful grasp plans that can be robust against
+unforeseen perturbations. This is a perfectly valid objective as few work
+before this paper has exploited the fact that successful execution of
+robot manipulation can generate some {\it expected} sensor readings that
+can be useful for adjusting subsequent executions that deviates from
+the expectation. This paper also achieves their objective by demonstrating
+how incorporating the adaptation helps improve the control robustness
+against initial condition perturbation.
+
+The overall quality of this paper is great. They made a few assumptions for
+their proposed method. One of them is that
+that some expert demonstration, or some successful grasp execution is
+available. Another one is that a successful execution should map
+to some expected sensor experience. Under these assumptions, their experiments
+show that the system works as expected. However, the assumptions could
+be unrealistic if the robotic manipulator has too many DoF such that even
+for human it is unintuitive to control. For the second assumption, there might
+be multiple different but all successful grasps that can map to drastically
+different sensor responses. Under such condition, it becomes unclear about
+how to generate feedback trajectory corrections given those different
+"correct" sensor experiences.
+
+\section{Questions}
+\begin{enumerate}
+  \item What is the $J_{sensor}$ in Equation (8)? And how does that relates
+    to the intuition of what $K_1$ and $K_2$ means.
+  \item Their methods seem to naturally generate this compliant behavior
+    given the adaptation. Why are they still concerned that the robotic
+    manipulator might collide with the table and break the fingers?
+\end{enumerate}
+
+\end{document}

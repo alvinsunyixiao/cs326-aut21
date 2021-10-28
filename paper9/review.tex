@@ -1,0 +1,101 @@
+\documentclass[10pt, twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[hmargin=.75in, vmargin=.75in]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+
+\title{\vspace{-3.0em}Paper Review\\Hierarchical Task and Motion Planning in the Now}
+\author{Alvin Sun}
+
+\begin{document}
+\maketitle
+
+\section{Paper Summary}
+This paper presents a recursively hierarchical planner that integrates both
+task level planning and motion level planning. They formulate the planning
+problem as meeting a conjunction of conditions, or fluents as they call it.
+Each condition might be achieved through achieving its pre-conditions and
+some primitive action. The planning process search from the most abstract goal
+state condition, and builds up a hierarchical planning tree where
+the less abstract sub-goals are generated to meet the pre-conditions. The length
+of the planned execution is somewhat minimized by finding the sub-goal with
+the weakest pre-conditions (easiest to achieve). The lowest level
+action planner uses sampling based method such as RRT to generate the motion
+of the robotic manipulator, while tightly integrated with hierarchical
+task planner. The author also conducted experiments by hand designing a set
+of conditions and primitive actions and the relationship among each other under the setting of
+commonly seen indoor cleaning tasks. The results has shown that their
+hierarchical planner is capable of planning for complicated multi-sequence
+tasks in long horizon.
+
+\section{What I Learned}
+\begin{enumerate}
+  \item Long-sequence task planning problems can be modeled with hand
+    designed hierarchical task dependence, while the plan can be generated
+    through search algorithms on such hierarchical dependence tree.
+
+  \item The length of the planned task sequence can be optimized by
+    meeting sub-goals with the weakest pre-conditions.
+\end{enumerate}
+
+\section{Opinions}
+
+\subsection{Up Votes}
+\begin{itemize}
+  \item I like how they walk through a concrete design of the hierarchical planner
+    they are proposing. The walk through of planning the problem of cleaning
+    dishes in the room really made the abstract mathematical definitions of those
+    fluents, operators, and goals very easy to follow.
+
+  \item I also like how they provided proofs for the completeness and correctness
+    of the proposed hierarchical planner. This is crucial for real-world deployment
+    as it provides certain level of guarantees on successfully finding feasible
+    plans even for complicated long-sequence tasks.
+\end{itemize}
+
+\subsection{Down Votes}
+Even though they mentioned in the very beginning that the states are three dimensional,
+their illustrations are pretty much two dimensional. I think they over simplified
+many real-world geometries such as dishes and dish washers. For example, planning
+for grasp pose on dishes and bowls alone is quite a challenging task, but here
+they are simplified as simple polygonal objects. Dish washer is abstracted
+simply as an area in this paper, but in reality could have complex geometries
+to deal with.
+
+\section{Evaluations}
+The goal of this paper is to present a planning methods that tightly integrates
+task level planning and motion planning. This is a valid objective because
+until the time of this work, there has been a long standing challenge for
+combining task planners and geometric motion planners and taking the complementary
+strength from both types of planners. This work delivers their goal by bringing
+forth a formally treated design of hierarchical planning system that
+is capable of planning long horizon multiple-sequence tasks.
+
+The overall quality of this paper is great. They did deliver a formal representation
+of such hierarchical planning system that can both be implemented and be proven
+complete and correct. However, one implicit assumption for this method to work
+is that there is some well defined (also fixed) relationship among some pre-defined
+sub-goals. Normally, for one specific task such as cleaning dishes with a dish
+washer, those sub-goals and their dependency with each other are well defined
+and easy to design. For more complex day-to-day routines, different people
+may have different preferences, and therefore different things can be done
+with different ways and in different orders. It will then become very difficult
+to hand engineer the task dependencies for those more complicated situations.
+Another thing that this method fall short of is that it assumes the knowledge
+of the full states of the world as well as the robot manipulator. This is
+to-date still unrealistic given estimation under unknown environment is
+still a challenging open questions to be solved.
+
+\section{Questions}
+\begin{enumerate}
+  \item How do they define the sub-goals with the "weakest" pre-conditions? Is
+    it with the least number of pre-conditions?
+  \item I am a little confused about what they meant by "postponing" a pre-condition.
+\end{enumerate}
+
+\end{document}
