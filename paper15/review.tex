@@ -1,0 +1,98 @@
+\documentclass[10pt, twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[hmargin=.75in, vmargin=.75in]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+
+\title{\vspace{-3.0em}Paper Review of Lessons from the Amazon Picking Challenge\\
+       Four Aspects of Building Robotic Systems}
+\author{Alvin Sun}
+
+\begin{document}
+\maketitle
+
+\section{Paper Summary}
+This paper discussed four spectrum of robotic system building under the context
+of the Amazon Picking Challenge. The four aspects are Modularity vs. Integration,
+Computation vs. Embodiment, Planning vs. Feedback, and Generality vs. Assumptions.
+The authors first introduces the overall algorithms for their first-place
+solution, where they uses feedback guided control of a suction-cup based
+manipulator, in combination with their perception module that segments
+visual information to determine object locations. They also showed quantitative
+evaluation of their grasping success rate both in the contest and in a replayed
+setting. Failure cases are thoroughly analyzed and improvements are proposed
+with the discussion for the four trade-off spectrum of design choices.
+
+\section{What I Learned}
+\begin{enumerate}
+  \item Modularity insures a smooth development cycle but imposes difficulties
+    for evaluating the robotic systems as a whole. Tightly integrated solutions
+    are harder to develop but may yield higher overall performance.
+
+  \item Feedback guided control are really powerful that it might completely
+    replace the need for a motion planner as in the case of this Amazon
+    Picking Challenge.
+\end{enumerate}
+
+\section{Opinions}
+
+\subsection{Up Votes}
+\begin{enumerate}
+  \item I agree about this author's claim that few researchers in the robotic
+    community has tried to explicitly characterize robotic system building.
+    This is true especially in the academia where people usually focuses on
+    performance of a single module within a robotic system rather than
+    the combined system as a whole.
+
+  \item I also strongly agree with their choice with a holonomic mobile base
+    which reduces quite a lot of complexity in planning motion with the manipulator.
+    This seems like a perfect example for the spectrum between software and hardware,
+    and this is just simple hardware that dramatically reduces software complexity.
+\end{enumerate}
+
+\subsection{Down Votes}
+I don't quite agree one of the four aspects they proposed, which is planning vs.
+feedback. Even though they showcase that with good feedback, a need for planner
+might be completely eliminated as in their case. However, I don't think these
+two things are necessarily trade-off, but rather could be complement of each other.
+A good feedback should be able to enhance planning but not replace it.
+
+\section{Evaluations}
+This paper aims at discussing multiple aspects of robotics system building and
+how design choices can affect the overall system complexity and performance. This
+is a perfectly valid objective as few prior work has focused on evaluating
+robotic applications from a system level, but they rather put more focus on
+the individual sub-problem they are trying to solve. I also agree that the
+system level design choices greatly impacts the overall performance, so
+it is definitely worth looking into these system building spectrum. The author
+also delivers their goal such that they also discussed their proposed
+findings under a concrete robotic contest setting with quantitative
+evaluation metric.
+
+The overall quality of this paper is excellent, as it not only proposed the four
+trade-off spectrum in robotic system building, but also evaluated their own
+award winning design choices within those spectrum. The assumption they made
+for this specific picking challenge is that objects are placed in a known shelf,
+which is quite reasonable given such controlled contest environment. What matters
+is their achieved generality under such assumption, which is their robot's
+capabilities of handling a variety of uncertainties in the actual challenge.
+They have also thoroughly analyzed their failure cases by replaying the challenge
+in a lab environment. One slight short coming is that even though they proposed
+future improvements within the guidelines of the four aspects, they did not
+show any results for the proposed improvements. This might be what's saved for
+future directions.
+
+\section{Questions}
+\begin{enumerate}
+  \item How do they exploit the force feedback to activate the suction cup? Is
+    it when some force detected is over a pre-determined threshold?
+
+  \item Why other teams rarely chose to use a holonomic base?
+\end{enumerate}
+
+\end{document}
